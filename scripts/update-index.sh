@@ -10,11 +10,11 @@ check_package() {
 }
 
 update_index() {
+    # Merge new charts into current index
     : ${GH_RELEASES_URL:="https://github.com/nuodb/nuodb-helm-charts/releases/download"}
     helm repo index "package/$1" --merge "$1/index.yaml" --url "$GH_RELEASES_URL"
-}
 
-stage_update() {
+    # Stage update to index file
     mv "package/$1/index.yaml" "$1/index.yaml"
     git add "$1/index.yaml"
 }
@@ -38,10 +38,10 @@ git merge --ff-only origin/gh-pages
 update_index stable
 update_index incubator
 
-# Commit and push changes if PUSH_UPDATE=true
+# Commit changes to indexes
+git commit -m "Add $(ls package/stable | sed 's|/||') charts to indexes"
+
+# Push changes if PUSH_UPDATE=true
 if [ "$PUSH_UPDATE" = true ]; then
-    stage_update stable
-    stage_update incubator
-    git commit -m "Add $(ls package/stable | sed 's|/||') charts to indexes"
     git push
 fi
