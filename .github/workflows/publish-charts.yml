@@ -35,7 +35,8 @@ jobs:
           gh release create v${{ steps.vars.outputs.version }} \
             -t "NuoDB Helm Charts ${{ steps.vars.outputs.version }}" \
             -F changelogs/v${{ steps.vars.outputs.version }}.md \
-            package/v${{ steps.vars.outputs.version }}/*.tgz
+            package/stable/v${{ steps.vars.outputs.version }}/*.tgz \
+            package/incubator/v${{ steps.vars.outputs.version }}/*.tgz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Update Helm index
